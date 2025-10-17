@@ -27,44 +27,56 @@
         function animateCounter(element, target, duration = 2000) {
             let current = 0;
             const increment = target / (duration / 16);
-            const isDecimal = target.toString().includes('.');
+
+            // Clear any existing timer
+            if (element.timer) {
+                clearInterval(element.timer);
+            }
             
-            const timer = setInterval(() => {
+            element.timer = setInterval(() => {
                 current += increment;
                 if (current >= target) {
                     current = target;
-                    clearInterval(timer);
+                    clearInterval(element.timer);
                 }
                 
                 if (target >= 1000) {
                     element.textContent = Math.floor(current).toLocaleString() + '+';
-                } else if (isDecimal) {
-                    element.textContent = current.toFixed(1) + '+';
                 } else {
                     element.textContent = Math.floor(current) + '+';
                 }
             }, 16);
+            
         }
 
         // Intersection Observer for stats animation
         const statsObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if (entry.isIntersecting && !entry.target.classList.contains('animated')) {
+                const counter = entry.target.querySelector('h3');
+                
+                if (entry.isIntersecting) {
                     entry.target.classList.add('animate');
-                    entry.target.classList.add('animated');
                     
-                    // Animate the counter
-                    const counter = entry.target.querySelector('h3');
-                    const text = counter.textContent;
-                    const value = parseInt(text.replace(/\D/g, ''));
+                    const originalText = counter.getAttribute('data-value') || counter.textContent;
+                    const value = parseInt(originalText.replace(/\D/g, ''));
+                    
+                    if (!counter.getAttribute('data-value')) {
+                        counter.setAttribute('data-value', originalText);
+                    }
                     
                     counter.textContent = '0';
                     setTimeout(() => {
                         animateCounter(counter, value, 2000);
-                    }, 200);
+                    }, 100);
+                } else {
+                    entry.target.classList.remove('animate');
+                    if (counter.timer) {
+                        clearInterval(counter.timer);
+                        counter.textContent = '0';
+                    }
                 }
             });
-        }, { threshold: 0.5 });
+        }, { threshold: 0.3 });
 
         // Observe all stat items
         document.addEventListener('DOMContentLoaded', () => {
@@ -91,12 +103,12 @@
             --olive-dark: #3D4F2F;
             --olive-green: #5A6F4A;
             --sage: #7A9070;
-            --dark-brown: #2B1F1A;
+            --dark-brown: #3E2A23;
             --medium-brown: #4A3428;
             --warm-brown: #6B4E3D;
             --cream: #E8DCC4;
             --off-white: #F5F1E8;
-            --charcoal: #1A1A1A;
+            --charcoal: #2D1F1A;
         }
 
         body {
@@ -112,7 +124,7 @@
             position: fixed;
             top: 0;
             width: 100%;
-            background: rgba(26, 26, 26, 0.95);
+            background: rgba(45, 31, 26, 0.95);
             backdrop-filter: blur(20px);
             z-index: 1000;
             padding: 1.2rem 5%;
@@ -177,6 +189,44 @@
         .nav-links a:hover,
         .nav-links a.active {
             color: var(--sage);
+        }
+
+        .search-icon {
+            color: var(--off-white);
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+            padding: 0.5rem;
+        }
+
+        .search-icon:hover {
+            color: var(--sage);
+        }
+
+        .logo-placeholder {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--olive-green), var(--sage));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 1.2rem;
+            margin-right: 0.8rem;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-image {
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
+            margin-right: 0.8rem;
         }
 
         /* Hero Section */
@@ -470,14 +520,140 @@
         footer {
             background: var(--charcoal);
             color: var(--off-white);
-            padding: 60px 5%;
-            text-align: center;
+            padding: 80px 5% 30px;
             border-top: 1px solid rgba(245, 241, 232, 0.1);
         }
 
         .footer-content {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
+        }
+
+        .footer-main {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 4rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-brand {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .footer-logo-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .footer-logo-placeholder {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--olive-green), var(--sage));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 1.5rem;
+            margin-right: 1rem;
+        }
+
+        .footer-brand h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: var(--cream);
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-brand p {
+            opacity: 0.8;
+            line-height: 1.8;
+            font-size: 0.95rem;
+        }
+
+        .footer-section h4 {
+            font-family: 'Playfair Display', serif;
+            color: var(--cream);
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-section ul li a {
+            color: var(--off-white);
+            text-decoration: none;
+            opacity: 0.8;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .footer-section ul li a:hover {
+            opacity: 1;
+            color: var(--sage);
+            padding-left: 5px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(122, 144, 112, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--off-white);
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .social-icon:hover {
+            background: var(--sage);
+            transform: translateY(-3px);
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.8rem;
+            opacity: 0.9;
+            font-size: 0.95rem;
+        }
+
+        .contact-item svg {
+            margin-top: 2px;
+            flex-shrink: 0;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(245, 241, 232, 0.1);
+            padding-top: 2rem;
+            text-align: center;
+            opacity: 0.7;
+            font-size: 0.9rem;
         }
 
         .footer-links {
@@ -498,6 +674,20 @@
         .footer-links a:hover {
             color: var(--sage);
             opacity: 1;
+        }
+
+        @media (max-width: 968px) {
+            .footer-main {
+                grid-template-columns: 1fr 1fr;
+                gap: 3rem;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .footer-main {
+                grid-template-columns: 1fr;
+                gap: 2.5rem;
+            }
         }
 
         /* Page Content */
@@ -642,7 +832,10 @@
 <body>
     <nav id="navbar">
         <div class="nav-container">
-            <a href="#" class="logo" onclick="showPage('home')">Helping Hands Penan</a>
+            <div class="logo-container">
+                <img src="hhp-logo.png" class="logo-image">
+                <a href="#" class="logo" onclick="showPage('home')">Helping Hands Penan</a>
+            </div>
             <ul class="nav-links">
                 <li><a href="#" class="active" onclick="showPage('home')">Home</a></li>
                 <li><a href="#" onclick="showPage('about')">About Us</a></li>
@@ -651,6 +844,12 @@
                 <li><a href="#" onclick="showPage('catalogue')">Catalogue</a></li>
                 <li><a href="#" onclick="showPage('donations')">Donations</a></li>
             </ul>
+            <div class="search-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                </svg>
+            </div>
         </div>
     </nav>
 
@@ -925,7 +1124,148 @@
     </div>
 
     <!-- DONATIONS PAGE -->
-    <div id="donations" class="page-content">
-        <section style="margin-top: 120px;">
-            <h2 class="section-title">Support Our Mission</h2>
-            <div class="text-content" style="max-width: 900px; margin: 0 auto; text-align
+        <div id="donations" class="page-content">
+            <section style="margin-top: 120px;">
+                <h2 class="section-title">Support Our Mission</h2>
+                <div class="text-content" style="max-width: 900px; margin: 0 auto; text-align: center; margin-bottom: 3rem;">
+                    <p style="font-size: 1.2rem;">Your contribution directly empowers the Penan people through education, economic opportunities, and community development. Every donation makes a tangible difference.</p>
+                </div>
+
+                <div class="mission-grid" style="margin-bottom: 4rem;">
+                    <div class="mission-card">
+                        <h3>Buy Handwoven Crafts</h3>
+                        <p>Purchase beautiful Penan bags and baskets. 100% of proceeds support education sponsorships and community infrastructure projects.</p>
+                    </div>
+                    <div class="mission-card">
+                        <h3>Sponsor a Student</h3>
+                        <p>Provide monthly allowances, transportation, and school supplies for Penan students pursuing education from primary through tertiary levels.</p>
+                    </div>
+                    <div class="mission-card">
+                        <h3>Direct Donations</h3>
+                        <p>Contribute to solar lighting installations, clean water systems, agricultural tools, and other essential community infrastructure.</p>
+                    </div>
+                </div>
+
+                <div class="donation-form">
+                    <h3 style="color: var(--cream); font-family: 'Playfair Display', serif; font-size: 2rem; margin-bottom: 1.5rem; text-align: center;">Get In Touch</h3>
+                    <p style="text-align: center; margin-bottom: 2rem; opacity: 0.9;">Interested in supporting our cause? Contact us to learn more about donation options and partnership opportunities.</p>
+                    
+                    <form>
+                        <div class="form-group">
+                            <label>Name</label>
+                            <input type="text" placeholder="Your full name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" placeholder="your.email@example.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Interest</label>
+                            <select required>
+                                <option value="">Select your interest</option>
+                                <option value="craft">Purchase Crafts</option>
+                                <option value="sponsor">Student Sponsorship</option>
+                                <option value="donate">General Donation</option>
+                                <option value="volunteer">Volunteer Opportunities</option>
+                                <option value="corporate">Corporate Partnership</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Message</label>
+                            <textarea placeholder="Tell us how you'd like to help or any questions you have..." required></textarea>
+                        </div>
+                        <button type="submit" class="submit-button">Send Message</button>
+                    </form>
+                </div>
+
+                <div class="text-content" style="max-width: 900px; margin: 4rem auto; text-align: center;">
+                    <h2 style="font-family: 'Playfair Display', serif; color: var(--cream); margin-bottom: 1.5rem;">Bank Transfer Details</h2>
+                    <p style="font-size: 1.1rem; margin-bottom: 2rem;">For direct bank transfers, please contact us at <strong>helpinghandspenan@gmail.com</strong> for our account details.</p>
+                    <p style="opacity: 0.8;">Helping Hands Penan is a registered non-profit organization. We operate with full transparency and accountability to ensure your donations create maximum impact.</p>
+                </div>
+            </section>
+        </div>
+
+    <!--FOOTER-->
+    <footer>
+    <div class="footer-content">
+        <div class="footer-main">
+            <div class="footer-brand">
+                <div class="footer-logo-container">
+                    <img src="hhp-logo.png">
+                    <h3>Helping Hands Penan</h3>
+                </div>
+                <p>Empowering indigenous communities through craft, education, and sustainable development. Together, we create lasting change.</p>
+                <div class="social-links">
+                    <a href="#" class="social-icon" aria-label="Facebook">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+                        </svg>
+                    </a>
+                    <a href="#" class="social-icon" aria-label="Instagram">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                        </svg>
+                    </a>
+                    <a href="#" class="social-icon" aria-label="Email">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                            <polyline points="22,6 12,13 2,6"></polyline>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#" onclick="showPage('home')">Home</a></li>
+                    <li><a href="#" onclick="showPage('about')">About Us</a></li>
+                    <li><a href="#" onclick="showPage('beneficiaries')">Beneficiaries</a></li>
+                    <li><a href="#" onclick="showPage('penan')">The Penan Tribe</a></li>
+                    <li><a href="#" onclick="showPage('catalogue')">Catalogue</a></li>
+                    <li><a href="#" onclick="showPage('donations')">Donations</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h4>Support</h4>
+                <ul>
+                    <li><a href="#">FAQ</a></li>
+                    <li><a href="#">How to Help</a></li>
+                    <li><a href="#">Volunteer</a></li>
+                    <li><a href="#">Corporate Partnerships</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h4>Contact Us</h4>
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                            <polyline points="22,6 12,13 2,6"></polyline>
+                        </svg>
+                        <span>helpinghandspenan@gmail.com</span>
+                    </div>
+                    <div class="contact-item">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                            <circle cx="12" cy="10" r="3"></circle>
+                        </svg>
+                        <span>Kuching, Sarawak<br>Malaysian Borneo</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2025 Helping Hands Penan. All rights reserved. A registered non-profit social enterprise.</p>
+        </div>
+    </div>
+</footer>
