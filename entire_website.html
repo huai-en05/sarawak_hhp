@@ -1,0 +1,931 @@
+<script>
+        // Navigation scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Page navigation
+        function showPage(pageId) {
+            const pages = document.querySelectorAll('.page-content');
+            const navLinks = document.querySelectorAll('.nav-links a');
+            
+            pages.forEach(page => page.classList.remove('active'));
+            navLinks.forEach(link => link.classList.remove('active'));
+            
+            document.getElementById(pageId).classList.add('active');
+            event.target.classList.add('active');
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Animated counter function
+        function animateCounter(element, target, duration = 2000) {
+            let current = 0;
+            const increment = target / (duration / 16);
+            const isDecimal = target.toString().includes('.');
+            
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    current = target;
+                    clearInterval(timer);
+                }
+                
+                if (target >= 1000) {
+                    element.textContent = Math.floor(current).toLocaleString() + '+';
+                } else if (isDecimal) {
+                    element.textContent = current.toFixed(1) + '+';
+                } else {
+                    element.textContent = Math.floor(current) + '+';
+                }
+            }, 16);
+        }
+
+        // Intersection Observer for stats animation
+        const statsObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && !entry.target.classList.contains('animated')) {
+                    entry.target.classList.add('animate');
+                    entry.target.classList.add('animated');
+                    
+                    // Animate the counter
+                    const counter = entry.target.querySelector('h3');
+                    const text = counter.textContent;
+                    const value = parseInt(text.replace(/\D/g, ''));
+                    
+                    counter.textContent = '0';
+                    setTimeout(() => {
+                        animateCounter(counter, value, 2000);
+                    }, 200);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        // Observe all stat items
+        document.addEventListener('DOMContentLoaded', () => {
+            const statItems = document.querySelectorAll('.stat-item');
+            statItems.forEach(item => statsObserver.observe(item));
+        });
+    </script><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Helping Hands Penan - Empowering Indigenous Communities</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --olive-dark: #3D4F2F;
+            --olive-green: #5A6F4A;
+            --sage: #7A9070;
+            --dark-brown: #2B1F1A;
+            --medium-brown: #4A3428;
+            --warm-brown: #6B4E3D;
+            --cream: #E8DCC4;
+            --off-white: #F5F1E8;
+            --charcoal: #1A1A1A;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            color: var(--off-white);
+            background: var(--dark-brown);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(26, 26, 26, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            padding: 1.2rem 5%;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid rgba(245, 241, 232, 0.1);
+        }
+
+        nav.scrolled {
+            background: rgba(26, 26, 26, 0.98);
+            box-shadow: 0 2px 30px rgba(0,0,0,0.5);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--cream);
+            text-decoration: none;
+            font-family: 'Playfair Display', serif;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 3rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--off-white);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--sage);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--sage);
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            background: linear-gradient(135deg, var(--charcoal) 0%, var(--dark-brown) 50%, var(--medium-brown) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 0 5%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><path d="M0,300 Q300,200 600,300 T1200,300 L1200,600 L0,600 Z" fill="%235A6F4A" opacity="0.15"/></svg>') no-repeat center;
+            background-size: cover;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 1000px;
+        }
+
+        .hero h1 {
+            font-size: 4.5rem;
+            font-weight: 500;
+            color: var(--cream);
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+            font-family: 'Playfair Display', serif;
+            letter-spacing: -1px;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: var(--off-white);
+            margin-bottom: 3rem;
+            font-weight: 300;
+            opacity: 0.9;
+            letter-spacing: 0.3px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1.1rem 3.5rem;
+            background: var(--olive-green);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: all 0.4s ease;
+            box-shadow: 0 8px 25px rgba(90, 111, 74, 0.4);
+        }
+
+        .cta-button:hover {
+            background: var(--sage);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(90, 111, 74, 0.5);
+        }
+
+        /* Section Styles */
+        section {
+            padding: 100px 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 3.5rem;
+            color: var(--cream);
+            margin-bottom: 3rem;
+            text-align: center;
+            font-family: 'Playfair Display', serif;
+            font-weight: 500;
+            letter-spacing: -1px;
+        }
+
+        /* Mission Section */
+        .mission-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+            margin-top: 3rem;
+        }
+
+        .mission-card {
+            background: rgba(58, 79, 47, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 3rem 2.5rem;
+            border-radius: 20px;
+            border: 1px solid rgba(122, 144, 112, 0.2);
+            transition: all 0.4s ease;
+        }
+
+        .mission-card:hover {
+            transform: translateY(-10px);
+            background: rgba(58, 79, 47, 0.3);
+            border-color: rgba(122, 144, 112, 0.4);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+
+        .mission-card h3 {
+            color: var(--sage);
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            font-family: 'Playfair Display', serif;
+            font-weight: 500;
+        }
+
+        .mission-card p {
+            color: var(--off-white);
+            font-size: 1.05rem;
+            line-height: 1.8;
+            opacity: 0.9;
+        }
+
+        /* Stats Section */
+        .stats {
+            background: linear-gradient(135deg, var(--olive-dark) 0%, var(--charcoal) 100%);
+            color: white;
+            padding: 100px 5%;
+            margin: 100px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stats::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 400"><circle cx="100" cy="100" r="80" fill="%237A9070" opacity="0.05"/><circle cx="1100" cy="300" r="120" fill="%235A6F4A" opacity="0.05"/></svg>') no-repeat;
+            background-size: cover;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 4rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .stat-item {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .stat-item.animate {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .stat-item h3 {
+            font-size: 4.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 300;
+            color: var(--cream);
+            font-family: 'Playfair Display', serif;
+            letter-spacing: -2px;
+        }
+
+        .stat-item p {
+            font-size: 1.1rem;
+            opacity: 0.85;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-weight: 300;
+        }
+
+        /* Image Text Section */
+        .image-text-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5rem;
+            align-items: center;
+            margin: 80px 0;
+        }
+
+        .image-text-section.reverse {
+            direction: rtl;
+        }
+
+        .image-text-section.reverse > * {
+            direction: ltr;
+        }
+
+        .image-placeholder {
+            background: linear-gradient(135deg, var(--olive-dark) 0%, var(--olive-green) 100%);
+            border-radius: 20px;
+            height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--cream);
+            font-size: 1.2rem;
+            font-family: 'Playfair Display', serif;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+        }
+
+        .text-content h2 {
+            font-size: 2.8rem;
+            color: var(--cream);
+            margin-bottom: 1.5rem;
+            font-family: 'Playfair Display', serif;
+            font-weight: 500;
+            letter-spacing: -1px;
+        }
+
+        .text-content p {
+            font-size: 1.15rem;
+            color: var(--off-white);
+            margin-bottom: 1.2rem;
+            line-height: 1.9;
+            opacity: 0.9;
+        }
+
+        /* Catalogue Grid */
+        .catalogue-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .product-card {
+            background: rgba(58, 79, 47, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(122, 144, 112, 0.2);
+            transition: all 0.4s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            background: rgba(58, 79, 47, 0.25);
+            border-color: rgba(122, 144, 112, 0.4);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+        }
+
+        .product-image {
+            background: linear-gradient(135deg, var(--olive-dark) 0%, var(--warm-brown) 100%);
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--cream);
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+        }
+
+        .product-info {
+            padding: 2rem 1.5rem;
+        }
+
+        .product-info h3 {
+            color: var(--cream);
+            margin-bottom: 0.7rem;
+            font-family: 'Playfair Display', serif;
+            font-weight: 500;
+            font-size: 1.4rem;
+        }
+
+        .product-info p {
+            color: var(--off-white);
+            font-size: 0.95rem;
+            opacity: 0.85;
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--charcoal);
+            color: var(--off-white);
+            padding: 60px 5%;
+            text-align: center;
+            border-top: 1px solid rgba(245, 241, 232, 0.1);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: var(--off-white);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            opacity: 0.8;
+        }
+
+        .footer-links a:hover {
+            color: var(--sage);
+            opacity: 1;
+        }
+
+        /* Page Content */
+        .page-content {
+            display: none;
+        }
+
+        .page-content.active {
+            display: block;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1.2rem;
+            }
+
+            .image-text-section {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+
+        /* Donation Form */
+        .donation-form {
+            max-width: 600px;
+            margin: 3rem auto;
+            background: rgba(58, 79, 47, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 3rem;
+            border-radius: 20px;
+            border: 1px solid rgba(122, 144, 112, 0.2);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            color: var(--cream);
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.3px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid rgba(122, 144, 112, 0.3);
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: inherit;
+            background: rgba(26, 26, 26, 0.5);
+            color: var(--off-white);
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--sage);
+            background: rgba(26, 26, 26, 0.7);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .submit-button {
+            width: 100%;
+            padding: 1.1rem;
+            background: var(--olive-green);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.4s ease;
+        }
+
+        .submit-button:hover {
+            background: var(--sage);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(122, 144, 112, 0.4);
+        }
+
+        .beneficiaries-list {
+            display: grid;
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .beneficiary-item {
+            background: rgba(58, 79, 47, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 2.5rem;
+            border-radius: 20px;
+            border-left: 4px solid var(--sage);
+            border: 1px solid rgba(122, 144, 112, 0.2);
+            border-left: 4px solid var(--sage);
+            transition: all 0.3s ease;
+        }
+
+        .beneficiary-item:hover {
+            background: rgba(58, 79, 47, 0.3);
+            transform: translateX(10px);
+        }
+
+        .beneficiary-item h3 {
+            color: var(--cream);
+            margin-bottom: 1rem;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem;
+        }
+
+        .beneficiary-item p {
+            color: var(--off-white);
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <nav id="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo" onclick="showPage('home')">Helping Hands Penan</a>
+            <ul class="nav-links">
+                <li><a href="#" class="active" onclick="showPage('home')">Home</a></li>
+                <li><a href="#" onclick="showPage('about')">About Us</a></li>
+                <li><a href="#" onclick="showPage('beneficiaries')">Beneficiaries</a></li>
+                <li><a href="#" onclick="showPage('penan')">The Penan Tribe</a></li>
+                <li><a href="#" onclick="showPage('catalogue')">Catalogue</a></li>
+                <li><a href="#" onclick="showPage('donations')">Donations</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- HOME PAGE -->
+    <div id="home" class="page-content active">
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Empowering the Penan Through Craft & Education</h1>
+                <p>A non-profit social enterprise dedicated to empowering indigenous communities in Sarawak, Malaysian Borneo</p>
+                <a href="#" class="cta-button" onclick="showPage('about')">Learn More</a>
+            </div>
+        </section>
+
+        <section>
+            <h2 class="section-title">Our Mission</h2>
+            <div class="mission-grid">
+                <div class="mission-card">
+                    <h3>Economic Empowerment</h3>
+                    <p>Supporting Penan women to earn sustainable income through their traditional weaving skills, creating beautiful handcrafted bags and baskets.</p>
+                </div>
+                <div class="mission-card">
+                    <h3>Education Support</h3>
+                    <p>Providing scholarships, transportation, and school supplies to ensure Penan children can access quality education from primary through tertiary levels.</p>
+                </div>
+                <div class="mission-card">
+                    <h3>Community Development</h3>
+                    <p>Funding essential infrastructure like solar lights, clean water systems, and tools to help communities become self-sufficient.</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="stats">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <h3>8+</h3>
+                    <p>Years of Impact</p>
+                </div>
+                <div class="stat-item">
+                    <h3>100+</h3>
+                    <p>Students Sponsored</p>
+                </div>
+                <div class="stat-item">
+                    <h3>30+</h3>
+                    <p>Dedicated Volunteers</p>
+                </div>
+                <div class="stat-item">
+                    <h3>1000+</h3>
+                    <p>Bags Sold Annually</p>
+                </div>
+            </div>
+        </div>
+
+        <section>
+            <div class="image-text-section">
+                <div class="image-placeholder">Traditional Penan Weaving</div>
+                <div class="text-content">
+                    <h2>Preserving Heritage Through Craft</h2>
+                    <p>The Penan are expert weavers with traditional skills passed down through generations. Each handwoven bag is unique, reflecting the beautiful ways of the Penan people.</p>
+                    <p>By purchasing their craft, you're not just buying a beautiful, practical item—you're supporting education, infrastructure, and a sustainable future for entire communities.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- ABOUT US PAGE -->
+    <div id="about" class="page-content">
+        <section style="margin-top: 120px;">
+            <h2 class="section-title">About Helping Hands Penan</h2>
+            <div class="text-content" style="max-width: 900px; margin: 0 auto;">
+                <p style="font-size: 1.3rem; text-align: center; margin-bottom: 3rem;">A registered non-profit social enterprise run entirely by volunteers, dedicated to empowering the indigenous Penan people of Sarawak, Malaysian Borneo.</p>
+            </div>
+
+            <div class="image-text-section">
+                <div class="image-placeholder">Our Journey</div>
+                <div class="text-content">
+                    <h2>How We Started</h2>
+                    <p>Helping Hands Penan began over 8 years ago from a simple conversation among expatriate wives who wanted to help indigenous families traveling to town for medical care. What started as selling rattan crafts to provide income has grown into a comprehensive mission.</p>
+                    <p>Registered officially in Malaysia on February 12, 2016, we operate purely through volunteer efforts with minimal overhead costs.</p>
+                </div>
+            </div>
+
+            <div class="image-text-section reverse">
+                <div class="image-placeholder">Our Approach</div>
+                <div class="text-content">
+                    <h2>How We Help</h2>
+                    <p>We are driven by twin goals: catering to short-term basic needs while empowering the Penan to become self-sufficient in the long run.</p>
+                    <p>The proceeds from selling handwoven craft fund essential items like solar lights for settlements without power, chainsaws and rice milling machines for livelihoods, transportation costs for students, school supplies, and monthly allowances for those pursuing higher education.</p>
+                    <p>We work directly with Penan communities, making regular trips to remote villages to purchase their handicrafts at prices they set themselves, ensuring fair compensation and dignity.</p>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2 class="section-title">Our Values</h2>
+            <div class="mission-grid">
+                <div class="mission-card">
+                    <h3>Empowerment</h3>
+                    <p>We believe in enabling communities to help themselves through education and economic opportunities, not creating dependency.</p>
+                </div>
+                <div class="mission-card">
+                    <h3>Transparency</h3>
+                    <p>All proceeds from craft sales go directly back to the Penan communities. We operate with full accountability to our donors and supporters.</p>
+                </div>
+                <div class="mission-card">
+                    <h3>Respect</h3>
+                    <p>We honor the Penan's traditional knowledge, skills, and ways of life while supporting their adaptation to modern challenges.</p>
+                </div>
+                <div class="mission-card">
+                    <h3>Sustainability</h3>
+                    <p>Every initiative is designed for long-term impact, creating lasting change rather than temporary relief.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- BENEFICIARIES PAGE -->
+    <div id="beneficiaries" class="page-content">
+        <section style="margin-top: 120px;">
+            <h2 class="section-title">Our Beneficiaries</h2>
+            <div class="text-content" style="max-width: 900px; margin: 0 auto; text-align: center; margin-bottom: 3rem;">
+                <p style="font-size: 1.2rem;">Helping Hands Penan directly supports Penan communities across remote settlements in Sarawak, focusing on women weavers, students, and families in need.</p>
+            </div>
+
+            <div class="beneficiaries-list">
+                <div class="beneficiary-item">
+                    <h3>Women Weavers</h3>
+                    <p>We work with skilled Penan women who use traditional weaving techniques to create beautiful bags and baskets. These women, many of whom did not receive formal education, earn sustainable income to support their families. We purchase their craft at fair prices they determine themselves, providing economic independence and dignity.</p>
+                </div>
+
+                <div class="beneficiary-item">
+                    <h3>Students & Youth</h3>
+                    <p>Through our Education Sponsorship Programme, we support Penan students from primary school through tertiary education. We provide transportation from remote jungle settlements to urban schools, school supplies, uniforms, and monthly allowances for those pursuing higher education. This addresses the typically high dropout rates caused by transportation difficulties and financial constraints.</p>
+                </div>
+
+                <div class="beneficiary-item">
+                    <h3>Remote Communities</h3>
+                    <p>We fund infrastructure improvements for settlements deep in the rainforest, including solar lighting systems for villages without power generators, clean water installations, chainsaws for sustainable forestry work, and rice milling machines to process their harvests.</p>
+                </div>
+
+                <div class="beneficiary-item">
+                    <h3>Families in Need</h3>
+                    <p>We assist Penan families who travel to town for medical care, often staying at halfway houses while receiving treatment. We provide immediate support for basic needs while creating opportunities for long-term self-sufficiency.</p>
+                </div>
+            </div>
+
+            <div class="image-text-section" style="margin-top: 5rem;">
+                <div class="image-placeholder">Community Impact</div>
+                <div class="text-content">
+                    <h2>Measurable Change</h2>
+                    <p>Over the years, we've witnessed vast improvements in the lives and financial situations of our beneficiaries. Women who were once economically dependent are now earning regular income. Children who would have dropped out of school are graduating and pursuing careers.</p>
+                    <p>Our long-term goal is to encourage the younger generation we're sponsoring to eventually take over the marketing and management of the craft business, creating a truly sustainable cycle of empowerment.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- THE PENAN TRIBE PAGE -->
+    <div id="penan" class="page-content">
+        <section style="margin-top: 120px;">
+            <h2 class="section-title">The Penan Tribe</h2>
+            <div class="text-content" style="max-width: 900px; margin: 0 auto; text-align: center; margin-bottom: 3rem;">
+                <p style="font-size: 1.3rem;">One of the last nomadic peoples in the world, the Penan of Sarawak possess deep wisdom about the rainforest and a gentle way of life that embodies profound respect for nature.</p>
+            </div>
+
+            <div class="image-text-section">
+                <div class="image-placeholder">Penan Heritage</div>
+                <div class="text-content">
+                    <h2>A People of the Forest</h2>
+                    <p>The Penan are indigenous to the forested region of upper Baram in northern Sarawak, Malaysian Borneo. Traditionally nomadic hunter-gatherers, they have lived in harmony with the rainforest for generations.</p>
+                    <p>They are noted for their practice of 'Molong'—a philosophy of never taking more than necessary from nature, embodying sustainable living long before it became a modern concept.</p>
+                </div>
+            </div>
+
+            <div class="image-text-section reverse">
+                <div class="image-placeholder">Traditional Knowledge</div>
+                <div class="text-content">
+                    <h2>Guardians of Ancient Wisdom</h2>
+                    <p>The Penan possess vast knowledge of the rainforest, especially its healing and medicinal properties. They are skilled craftspeople, creating fine bags, baskets, mats, spears, and blowpipes using traditional techniques passed down through generations.</p>
+                    <p>Their simple way of life embodies elusive values like deep spiritual respect for nature and strong communal sharing, with little emphasis on individual ownership.</p>
+                </div>
+            </div>
+
+            <div class="image-text-section">
+                <div class="image-placeholder">Modern Challenges</div>
+                <div class="text-content">
+                    <h2>A People at a Crossroads</h2>
+                    <p>Since the 1950s, the Penan have faced tremendous challenges. Rampant logging in their ancestral forests has devastated their ability to sustain themselves through traditional hunting and gathering.</p>
+                    <p>Most Penan communities have transitioned from nomadic life to settlement in longhouse-based villages, adapting to a more sedentary lifestyle while trying to preserve their cultural identity and skills.</p>
+                    <p>Living far from towns, they face economic marginalization and limited access to education and healthcare. The loss of forest resources has made their traditional way of life increasingly difficult to maintain.</p>
+                </div>
+            </div>
+
+            <section>
+                <h2 class="section-title" style="margin-top: 4rem;">Supporting Cultural Continuity</h2>
+                <div class="text-content" style="max-width: 900px; margin: 0 auto;">
+                    <p style="font-size: 1.2rem; text-align: center;">Helping Hands Penan works to support the Penan in their transition while preserving their valuable traditional skills and knowledge. By creating market opportunities for their exceptional craftwork, we help ensure that Penan weaving traditions continue to thrive and provide economic benefit to future generations.</p>
+                </div>
+            </section>
+        </section>
+    </div>
+
+    <!-- CATALOGUE PAGE -->
+    <div id="catalogue" class="page-content">
+        <section style="margin-top: 120px;">
+            <h2 class="section-title">Our Catalogue</h2>
+            <p style="text-align: center; font-size: 1.2rem; max-width: 800px; margin: 0 auto 3rem;">Each piece is handwoven by Penan women using traditional techniques. Every bag is unique, with slight variations in size and pattern that make your purchase truly one-of-a-kind.</p>
+
+            <div class="catalogue-grid">
+                <div class="product-card">
+                    <div class="product-image">Shoulder Bag</div>
+                    <div class="product-info">
+                        <h3>Classic Shoulder Bags</h3>
+                        <p>Versatile everyday bags perfect for work or casual outings. Woven from durable plastic straps with traditional Penan patterns.</p>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-image">Tote Bag</div>
+                    <div class="product-info">
+                        <h3>Large Tote Bags</h3>
+                        <p>Spacious bags ideal for shopping, beach trips, or carrying daily essentials. Strong and built to last.</p>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-image">Crossbody Bag</div>
+                    <div class="product-info">
+                        <h3>Crossbody Bags</h3>
+                        <p>Compact and stylish bags perfect for hands-free convenience. Great for travel or everyday use.</p>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-image">Market Basket</div>
+                    <div class="product-info">
+                        <h3>Market Baskets</h3>
+                        <p>Traditional style baskets perfect for shopping or storage. Sturdy construction with comfortable handles.</p>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-image">Rattan Craft</div>
+                    <div class="product-info">
+                        <h3>Rattan Baskets</h3>
+                        <p>Beautiful baskets woven from natural rattan using traditional Penan techniques. Each piece showcases exceptional craftsmanship.</p>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-image">Special Collection</div>
+                    <div class="product-info">
+                        <h3>Limited Edition Pieces</h3>
+                        <p>Unique collaborative designs and award-winning pieces featuring innovative patterns and techniques.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-content" style="max-width: 900px; margin: 4rem auto; text-align: center;">
+                <h2>Why Choose Penan Craft?</h2>
+                <div class="mission-grid" style="margin-top: 2rem;">
+                    <div class="mission-card">
+                        <h3>Unique & Handmade</h3>
+                        <p>No two bags are identical. Each carries the individual touch of the weaver who created it.</p>
+                    </div>
+                    <div class="mission-card">
+                        <h3>Durable & Practical</h3>
+                        <p>Made from strong materials built to withstand daily use. These bags last for years.</p>
+                    </div>
+                    <div class="mission-card">
+                        <h3>Direct Impact</h3>
+                        <p>100% of proceeds support Penan education, infrastructure, and community welfare programs.</p>
+                    </div>
+                </div>
+                <p style="margin-top: 3rem; font-size: 1.2rem;">For purchases and inquiries, please contact us at <strong>helpinghandspenan@gmail.com</strong> or visit us at our pop-up sales events across Malaysia.</p>
+            </div>
+        </section>
+    </div>
+
+    <!-- DONATIONS PAGE -->
+    <div id="donations" class="page-content">
+        <section style="margin-top: 120px;">
+            <h2 class="section-title">Support Our Mission</h2>
+            <div class="text-content" style="max-width: 900px; margin: 0 auto; text-align
