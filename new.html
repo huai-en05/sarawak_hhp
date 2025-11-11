@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Partner with Helping Hands Penan - Authentic Luxury for Your Hotel</title>
+    <title>Partner with Helping Hands Penan - Authentic Crafts for Your Hotel</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -64,8 +64,8 @@
         }
 
         .logo-image {
-            width: 60px;
-            height: 60px;
+            width: 50px;
+            height: 50px;
             object-fit: contain;
         }
 
@@ -112,13 +112,13 @@
         }
 
         .hero {
-            height: 100vh;
+            min-height: 100vh;
             background: linear-gradient(135deg, var(--off-white) 0%, var(--cream) 50%, var(--beige) 100%);
             display: flex;
             align-items: center;
             justify-content: center;
             text-align: center;
-            padding: 0 5%;
+            padding: 120px 5% 80px;
             position: relative;
             overflow: hidden;
         }
@@ -154,16 +154,27 @@
         .hero-badge {
             display: inline-block;
             padding: 0.5rem 1.5rem;
-            background: linear-gradient(135deg, rgba(45, 95, 63, 0.1), rgba(122, 144, 112, 0.1));
-            border: 1px solid var(--primary-green);
+            background: linear-gradient(135deg, rgba(201, 169, 97, 0.25), rgba(139, 111, 71, 0.25));
+            border: 2px solid var(--deep-brown);
             border-radius: 50px;
-            color: var(--primary-green);
+            color: var(--deep-brown);
             font-size: 0.9rem;
-            font-weight: 600;
+            font-weight: 700;
             letter-spacing: 1px;
             text-transform: uppercase;
             margin-bottom: 2rem;
-            box-shadow: 0 4px 15px rgba(45, 95, 63, 0.1);
+            box-shadow: 0 4px 15px rgba(201, 169, 97, 0.4), 0 0 25px rgba(201, 169, 97, 0.3);
+            animation: glow 2s ease-in-out infinite;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        @keyframes glow {
+            0%, 100% {
+                box-shadow: 0 4px 15px rgba(201, 169, 97, 0.4), 0 0 25px rgba(201, 169, 97, 0.3);
+            }
+            50% {
+                box-shadow: 0 4px 20px rgba(201, 169, 97, 0.6), 0 0 35px rgba(201, 169, 97, 0.5);
+            }
         }
 
         .hero h1 {
@@ -254,10 +265,6 @@
             background: linear-gradient(135deg, var(--primary-green), var(--light-green));
         }
 
-        .cta-button.secondary:hover {
-            color: var(--off-white);
-        }
-
         section {
             padding: 100px 5%;
             max-width: 1400px;
@@ -302,6 +309,15 @@
             grid-template-columns: repeat(3, 1fr);
             gap: 3rem 3.5rem;
             margin-top: 4rem;
+        }
+
+        @media (max-width: 1200px) {
+            .benefits-grid {
+                grid-template-columns: 1fr;
+                max-width: 600px;
+                margin-left: auto;
+                margin-right: auto;
+            }
         }
 
         .benefit-card {
@@ -438,20 +454,41 @@
         .process-step {
             text-align: center;
             position: relative;
+            background: var(--off-white);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid var(--border-light);
+            transition: all 0.4s ease;
+        }
+
+        .process-text {
+            position: absolute; 
+            bottom: 0; 
+            left: 0;
+            margin: 0 1.5rem 2rem 1.5rem;
+        }
+
+        .process-step:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(45, 95, 63, 0.15);
+        }
+
+        .process-step img {
+            display: block;
         }
 
         .process-number {
-            width: 80px;
-            height: 80px;
+            width: 60px;
+            height: 60px;
             background: linear-gradient(135deg, var(--primary-green), var(--light-green));
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2rem;
+            font-size: 1.5rem;
             font-weight: 700;
             color: var(--off-white);
-            margin: 0 auto 1.5rem;
+            margin: 0 auto 1rem;
             font-family: 'Playfair Display', serif;
             box-shadow: 0 8px 25px rgba(45, 95, 63, 0.25);
             position: relative;
@@ -511,7 +548,8 @@
         .image-placeholder {
             background: linear-gradient(135deg, var(--primary-green) 0%, var(--light-green) 50%, var(--moss-green) 100%);
             border-radius: 20px;
-            height: 500px;
+            height: 100%;
+            min-height: 500px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -643,11 +681,11 @@
             content: '';
             position: absolute;
             top: 0;
-            left: 7px;
-            width: 98%;
+            left: 0;
+            width: 100%;
             height: 4px;
             background: linear-gradient(90deg, var(--primary-green), var(--gold), var(--warm-brown));
-            border-radius: 100px 100px 0 0;
+            border-radius: 20px 20px 0 0;
         }
 
         .form-row {
@@ -768,7 +806,10 @@
 
         @media (max-width: 1200px) {
             .benefits-grid {
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns: 1fr;
+                max-width: 600px;
+                margin-left: auto;
+                margin-right: auto;
             }
             
             .process-grid {
@@ -779,7 +820,7 @@
         @media (max-width: 768px) {
 
             .hero {
-                padding-top: 80px;
+                padding-top: 120px;
             }
 
             .hero h1 {
@@ -808,13 +849,13 @@
                 align-items: center;
             }
 
+            .cta-nav {
+                display: none;
+            }
+
             .cta-button {
                 width: 100%;
                 max-width: 300px;
-            }
-
-            .cta-nav {
-                display: none;
             }
 
             .benefits-grid {
@@ -843,7 +884,7 @@
         <div class="hero-content">
             <div class="hero-badge">For Hospitality Partners</div>
             <h1>Elevate Your Guest Experience with Authentic Penan Rattan Craft</h1>
-            <p>Partner with Helping Hands Penan to bring ethically sourced, handwoven luxury to your hotel, while making a meaningful social impact</p>
+            <p>Partner with Helping Hands Penan to bring ethically sourced, handwoven crafts to your hotel while making a meaningful social impact.</p>
             <div class="cta-buttons">
                 <a href="#contact" class="cta-button"><span>Schedule a Consultation</span></a>
                 <a href="#process" class="cta-button secondary"><span>See How It's Made</span></a>
@@ -853,55 +894,37 @@
 
     <section>
         <h2 class="section-title">Why Partner with HHP?</h2>
-        <p class="section-subtitle">Transform your hotel spaces with authentic craftsmanship while supporting indigenous communities and advancing your sustainability goals</p>
+        <p class="section-subtitle">Transform your hotel spaces with authentic craftsmanship while supporting indigenous communities and advancing your sustainability goals.</p>
 
         <div class="benefits-grid">
             <div class="benefit-card">
-                <div class="benefit-icon"><i class="fas fa-leaf"></i></div>
-                <h3>Authentic Luxury</h3>
-                <p>Each piece is handwoven by indigenous Penan artisans using centuries-old techniques. Your guests experience genuine cultural heritage, not mass-produced replicas.</p>
-            </div>
-
-            <div class="benefit-card">
-                <div class="benefit-icon"><i class="fas fa-recycle"></i></div>
-                <h3>Sustainability Credentials</h3>
-                <p>100% natural, renewable rattan materials harvested sustainably from Malaysian Borneo rainforests. Zero plastic, zero carbon-intensive manufacturing.</p>
-            </div>
-
-            <div class="benefit-card">
                 <div class="benefit-icon"><i class="fas fa-hands-helping"></i></div>
                 <h3>Transforming Lives</h3>
-                <p>We help the Penan tribe break cycles of poverty through sustainable economic opportunities. Every purchase funds education scholarships for Penan children from primary through university, solar lighting for villages without power, clean water systems, and essential tools that improve quality of life in remote rainforest communities.</p>
+                <p>We help the Penan tribe break cycles of poverty through sustainable economic opportunities. Every purchase funds education scholarships for Penan children from primary through university and improve the quality of life in remote rainforest communities.</p>
             </div>
 
             <div class="benefit-card">
                 <div class="benefit-icon"><i class="fas fa-book-open"></i></div>
                 <h3>Guest Storytelling</h3>
-                <p>Each piece comes with its story—the artisan who made it, the community it supports, the traditional techniques used. Create memorable experiences that guests will photograph, share, and remember long after checkout.</p>
+                <p>Each piece comes with its story: the artisan who made it, the community it supports, the traditional techniques used. Create memorable experiences that guests will photograph, share, and remember long after checkout.</p>
             </div>
 
             <div class="benefit-card">
                 <div class="benefit-icon"><i class="fas fa-palette"></i></div>
                 <h3>Customisable Design</h3>
-                <p>Our collaborative collections can be customised to cater to different functionalities, include personlisation on each product such as logos and brand names, as well as a variety of designs to choose from.</p>
-            </div>
-
-            <div class="benefit-card">
-                <div class="benefit-icon"><i class="fas fa-handshake"></i></div>
-                <h3>Full Partnership Support</h3>
-                <p>Receive bulk ordering, staff training on the craft story, marketing materials, and ongoing support from our volunteer team. Feel free to contact us even after the transaction has been completed.</p>
+                <p>Our collaborative collections can be customised to cater to different functionalities, include personalisation on each product such as logos and brand names, as well as a variety of designs to choose from.</p>
             </div>
         </div>
     </section>
 
     <section>
         <h2 class="section-title">Meet the Penan People</h2>
-        <p class="section-subtitle">Watch this short documentary to understand the rich heritage and challenges faced by the Penan tribe</p>
+        <p class="section-subtitle">Watch this short documentary to understand the rich heritage and challenges faced by the Penan tribe.</p>
         
         <div class="video-container">
             <div class="video-wrapper">
                 <iframe 
-                    src="YOUR_VIDEO_URL_HERE" 
+                    src="images/Weaving_Futures.mp4" 
                     title="Penan Tribe Documentary" 
                     frameborder="0" 
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
@@ -909,7 +932,7 @@
                 </iframe>
             </div>
             <div class="video-caption">
-                <p>A glimpse into the lives of the Penan people—their traditions, challenges, and the craftsmanship that has sustained them for generations.</p>
+                <p>A glimpse into the lives of the Penan people: their traditions, challenges, and the craftsmanship that has sustained them for generations.</p>
             </div>
         </div>
     </section>
@@ -917,55 +940,67 @@
     <div class="process-section" id="process">
         <div class="process-container">
             <h2 class="section-title">The Penan Weaving Process</h2>
-            <p class="section-subtitle">From rainforest to refined luxury—witness the journey of authentic rattan craftsmanship</p>
+            <p class="section-subtitle">From rainforest to refined crafts, witness the journey of authentic rattan craftsmanship</p>
 
             <div class="process-grid">
-                <div class="process-step">
-                    <div class="process-number">1</div>
-                    <h3>Sustainable Harvesting</h3>
-                    <p>Penan men sustainably harvest rattan from the Malaysian Borneo rainforest, following traditional "Molong" principles—never taking more than nature can replenish.</p>
+                <div class="process-step" style="background: linear-gradient(to top, rgb(29, 17, 1), rgba(4, 91, 36, 0)), url('images/solo-harvesting.JPG'); background-size: cover; background-position: center; min-height: 500px; display: flex; flex-direction: column; justify-content: center; color: var(--off-white);">
+                    <div class="process-text">
+                        <div class="process-number" style="background: linear-gradient(135deg, rgb(29, 17, 1), rgb(74, 44, 4)); color: var(--off-white);">1</div>
+                        <h3 style="color: var(--off-white);">Sustainable Harvesting</h3>
+                        <p style="color: var(--off-white); opacity: 0.95;">Penan men sustainably harvest rattan from the Malaysian Borneo rainforest, following traditional "Molong" principles: never taking more than nature can replenish.</p>
+                    </div>
                 </div>
 
-                <div class="process-step">
-                    <div class="process-number">2</div>
-                    <h3>Careful Preparation</h3>
-                    <p>Rattan is stripped, cleaned, and split into fine strands. This meticulous preparation can take days, requiring deep knowledge of the material's properties.</p>
+                <div class="process-step" style="background: linear-gradient(to top, rgb(29, 17, 1), rgba(4, 91, 36, 0)), url('images/processing.JPG'); background-size: cover; background-position: center; min-height: 500px; display: flex; flex-direction: column; justify-content: center; color: var(--off-white);">
+                    <div class="process-text">
+                        <div class="process-number" style="background: linear-gradient(135deg, rgb(29, 17, 1), rgb(74, 44, 4)); color: var(--off-white);">2</div>
+                        <h3 style="color: var(--off-white);">Careful Preparation</h3>
+                        <p style="color: var(--off-white); opacity: 0.95;">Rattan is stripped, cleaned, and split into fine strands. This meticulous preparation can take days, requiring deep knowledge of the material's properties.</p>
+                    </div>
                 </div>
 
-                <div class="process-step">
-                    <div class="process-number">3</div>
-                    <h3>Traditional Dyeing</h3>
-                    <p>Natural dyes create rich, earthy tones. Some artisans use plastic straps for vibrant colors, blending tradition with contemporary aesthetics.</p>
-                </div>
+                <div class="process-step" style="background: linear-gradient(to top, rgb(29, 17, 1), rgba(4, 91, 36, 0)), url('images/dyeing.JPG'); background-size: cover; background-position: center; min-height: 500px; display: flex; flex-direction: column; justify-content: center; color: var(--off-white);">
+                    <div class="process-text">
+                        <div class="process-number" style="background: linear-gradient(135deg, rgb(29, 17, 1), rgb(74, 44, 4)); color: var(--off-white);">3</div>
+                        <h3 style="color: var(--off-white);">Traditional Dyeing</h3>
+                        <p style="color: var(--off-white); opacity: 0.95;">Natural dyes create rich, earthy tones. Some artisans use berries and leaves for vibrant colors, blending tradition with contemporary aesthetics.</p>
+                    </div>
+                </div>    
 
-                <div class="process-step">
-                    <div class="process-number">4</div>
-                    <h3>Expert Weaving</h3>
-                    <p>Penan women weave intricate patterns passed down through generations. Each basket takes 2-7 days to complete, with every piece unique.</p>
-                </div>
+                <div class="process-step" style="background: linear-gradient(to top, rgb(29, 17, 1), rgba(4, 91, 36, 0)), url('images/weaving2.PNG'); background-size: cover; background-position: center 170%; min-height: 500px; display: flex; flex-direction: column; justify-content: center; color: var(--off-white);">
+                    <div class="process-text">
+                        <div class="process-number" style="background: linear-gradient(135deg, rgb(29, 17, 1), rgb(74, 44, 4)); color: var(--off-white);">4</div>
+                        <h3 style="color: var(--off-white);">Expert Weaving</h3>
+                        <p style="color: var(--off-white); opacity: 0.95;">Penan women weave intricate patterns passed down through generations. Each basket takes 2-7 days to complete, with every piece unique.</p>
+                    </div>
+                </div>   
 
-                <div class="process-step">
-                    <div class="process-number">5</div>
-                    <h3>Quality Finishing</h3>
-                    <p>Final touches include reinforced handles, protective treatments, and quality inspection. The result: durable art that lasts for years.</p>
-                </div>
+                <div class="process-step" style="background: linear-gradient(to top, rgb(29, 17, 1), rgba(4, 91, 36, 0)), url('images/products.jpg'); background-size: cover; background-position: center 250%; min-height: 500px; display: flex; flex-direction: column; justify-content: center; color: var(--off-white);">
+                    <div class="process-text">
+                        <div class="process-number" style="background: linear-gradient(135deg, rgb(29, 17, 1), rgb(74, 44, 4)); color: var(--off-white);">5</div>
+                        <h3 style="color: var(--off-white);">Quality Finishing</h3>
+                        <p style="color: var(--off-white); opacity: 0.95;">Final touches include reinforced handles and quality inspection. The result: durable art that lasts for years.</p>
+                    </div>
+                </div>   
 
-                <div class="process-step">
-                    <div class="process-number">6</div>
-                    <h3>Direct to You</h3>
-                    <p>We purchase directly from artisans at prices they set, ensuring fair compensation. Your hotel receives authentic craft with a documented story.</p>
-                </div>
+                <div class="process-step" style="background: linear-gradient(to top, rgb(29, 17, 1), rgba(4, 91, 36, 0)), url('images/rudy.jpg'); background-size: cover; background-position: center; min-height: 500px; display: flex; flex-direction: column; justify-content: center; color: var(--off-white);">
+                    <div class="process-text">
+                        <div class="process-number" style="background: linear-gradient(135deg, rgb(29, 17, 1), rgb(74, 44, 4)); color: var(--off-white);">6</div>
+                        <h3 style="color: var(--off-white);">Direct to You</h3>
+                        <p style="color: var(--off-white); opacity: 0.95;">We purchase directly from artisans at prices they set, ensuring fair compensation. Your hotel receives authentic craft with a documented story.</p>
+                    </div>
+                </div>   
             </div>
         </div>
     </div>
 
     <section>
         <div class="image-text-section">
-            <div class="image-placeholder">Penan Artisan at Work</div>
+            <img src="images/weaving.JPG" alt="Penan Artisan at Work" style="width: 100%; height: 100%; min-height: 500px; object-fit: cover; border-radius: 20px; box-shadow: 0 15px 50px rgba(45, 95, 63, 0.25);">
             <div class="text-content">
                 <h2>Meet the Makers</h2>
-                <p>The Penan are one of the last nomadic tribes in Southeast Asia, with profound knowledge of the rainforest ecosystem. For generations, they've practiced the art of rattan weaving—creating everything from carrying baskets to sleeping mats.</p>
-                <p>Today, faced with deforestation and modernization, Penan women use their ancestral skills to earn sustainable income. Your partnership helps preserve this endangered cultural heritage while supporting entire families.</p>
+                <p>The Penan are one of the nomadic tribes in Southeast Asia, with profound knowledge of the rainforest ecosystem. For generations, they've practiced the art of rattan weaving, creating everything from carrying baskets to sleeping mats.</p>
+                <p>Today, faced with deforestation and modernisation, Penan men and women use their ancestral skills to earn sustainable income. Your partnership helps preserve this endangered cultural heritage while supporting entire families.</p>
                 <p><strong>When you choose Penan craft, you're choosing:</strong></p>
                 <ul>
                     <li>Fair wages for indigenous artisans</li>
